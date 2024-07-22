@@ -7,7 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f0f2f5;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   height: 100vh;
 }
@@ -19,10 +19,46 @@ code {
 
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  flex: 1;
+}
+
+.navbar {
   width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand a {
+  font-size: 24px;
+  color: #333;
+  text-decoration: none;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-item {
+  margin-left: 20px;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navbar-item button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
 }
 
 .login-box {

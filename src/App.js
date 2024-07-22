@@ -1,7 +1,10 @@
+// App.js
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { login, logout, getCurrentUser } from './services/auth';
 import './App.css';
-
+import Login from './components/Login';
+import AnnoncePage from './components/AnnoncePage';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -46,27 +49,22 @@ const App = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1>Petites Annonces</h1>
-      {user ? (
-        <div>
-          <h2>Welcome, {user.name}</h2>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <form onSubmit={handleLogin}>
-          <div>
-            <label>Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
-          <div>
-            <label>Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </div>
-          <button type="submit">Login</button>
-        </form>
-      )}
-    </div>
+    <Router>
+      <div className="container">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              user ? (
+                <AnnoncePage user={user} handleLogout={handleLogout} />
+              ) : (
+                <Login handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
+              )
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
