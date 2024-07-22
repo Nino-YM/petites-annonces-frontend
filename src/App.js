@@ -5,6 +5,7 @@ import { login, logout, getCurrentUser } from './services/auth';
 import './App.css';
 import Login from './components/Login';
 import AnnoncePage from './components/AnnoncePage';
+import AdminPage from './components/AdminPage';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -56,7 +57,11 @@ const App = () => {
             path="/"
             element={
               user ? (
-                <AnnoncePage user={user} handleLogout={handleLogout} />
+                user.role === 'admin' ? (
+                  <AdminPage user={user} handleLogout={handleLogout} />
+                ) : (
+                  <AnnoncePage user={user} handleLogout={handleLogout} />
+                )
               ) : (
                 <Login handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
               )
