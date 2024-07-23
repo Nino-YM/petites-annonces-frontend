@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Navbar.css';
 
 const Navbar = ({ user, handleLogout }) => (
     <nav className="navbar">
@@ -13,7 +14,7 @@ const Navbar = ({ user, handleLogout }) => (
                     <button className="navbar-item" onClick={handleLogout}>Logout</button>
                 </>
             ) : (
-                <Link className="navbar-item" to="/login">Login</Link>
+                <Link className="navbar-item" to="/">Login</Link>
             )}
         </div>
     </nav>

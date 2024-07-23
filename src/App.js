@@ -1,10 +1,9 @@
-// App.js
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { login, logout, getCurrentUser } from './services/auth';
 import './App.css';
 import Login from './components/Login';
-import AnnoncePage from './components/AnnoncePage';
+import HomePage from './components/HomePage';
 import AdminPage from './components/AdminPage';
 
 const App = () => {
@@ -57,13 +56,23 @@ const App = () => {
             path="/"
             element={
               user ? (
-                user.role === 'admin' ? (
-                  <AdminPage user={user} handleLogout={handleLogout} />
+                user.is_admin ? (
+                  <Navigate to="/admin" />
                 ) : (
-                  <AnnoncePage user={user} handleLogout={handleLogout} />
+                  <HomePage user={user} handleLogout={handleLogout} />
                 )
               ) : (
                 <Login handleLogin={handleLogin} email={email} setEmail={setEmail} password={password} setPassword={setPassword} />
+              )
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              user && user.is_admin ? (
+                <AdminPage user={user} handleLogout={handleLogout} />
+              ) : (
+                <Navigate to="/" />
               )
             }
           />

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import './AdminPage.css';
-import { getAnnonces, addAnnonce, deleteAnnonce } from '../services/api';
+import React, { useEffect, useState } from 'react';
+import { getAnnonces, addAnnonce } from '../services/api';
+import './HomePage.css';
 
-const AdminPage = ({ user, handleLogout }) => {
+const HomePage = ({ user, handleLogout }) => {
+    const [annonces, setAnnonces] = useState([]);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [prix, setPrix] = useState('');
-    const [annonces, setAnnonces] = useState([]);
 
     useEffect(() => {
         const fetchAnnonces = async () => {
@@ -21,7 +21,7 @@ const AdminPage = ({ user, handleLogout }) => {
         fetchAnnonces();
     }, []);
 
-    const handleAddAnnonce = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await addAnnonce({ titre: title, description, prix, user_id: user.id });
@@ -30,42 +30,24 @@ const AdminPage = ({ user, handleLogout }) => {
             setDescription('');
             setPrix('');
             const response = await getAnnonces();
-            setAnnonces(response.data.annonces); // Update the list of annonces
+            setAnnonces(response.data.annonces);
         } catch (error) {
             console.error('Failed to create annonce', error);
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await deleteAnnonce(id);
-            alert('Annonce deleted successfully');
-            const response = await getAnnonces();
-            setAnnonces(response.data.annonces); // Update the list of annonces
-        } catch (error) {
-            console.error('Failed to delete annonce', error);
-        }
-    };
-
     return (
-        <div className="admin-page">
-            <nav className="navbar">
-                <div className="navbar-brand">Admin - Petites Annonces</div>
-                <div className="navbar-user">
-                    <span>Welcome, {user.name}</span>
-                    <button onClick={handleLogout} className="logout-button">Logout</button>
-                </div>
-            </nav>
-            <div className="admin-content">
+        <div className="home-page">
+            <div className="home-content">
                 <h2>Add New Annonce</h2>
-                <form onSubmit={handleAddAnnonce} className="admin-form">
+                <form onSubmit={handleSubmit} className="annonce-form">
                     <div className="input-group">
                         <label>Title</label>
                         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
                     </div>
                     <div className="input-group">
                         <label>Description</label>
-                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required></textarea>
                     </div>
                     <div className="input-group">
                         <label>Price</label>
@@ -81,7 +63,6 @@ const AdminPage = ({ user, handleLogout }) => {
                             <p>{annonce.description}</p>
                             <p>Price: {annonce.prix}</p>
                             <p>Posted by: {annonce.user.name}</p>
-                            <button onClick={() => handleDelete(annonce.id)}>Delete</button> {/* Delete button */}
                         </li>
                     ))}
                 </ul>
@@ -90,4 +71,4 @@ const AdminPage = ({ user, handleLogout }) => {
     );
 };
 
-export default AdminPage;
+export default HomePage;
