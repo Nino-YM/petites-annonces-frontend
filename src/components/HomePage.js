@@ -1,3 +1,4 @@
+// HomePage.js
 import React, { useEffect, useState } from 'react';
 import { getAnnonces, addAnnonce } from '../services/api';
 import './HomePage.css';
@@ -38,6 +39,13 @@ const HomePage = ({ user, handleLogout }) => {
 
     return (
         <div className="home-page">
+            <nav className="navbar">
+                <div className="navbar-brand"> Petites Annonces</div>
+                <div className="navbar-user">
+                    <span>Welcome, {user.name}</span>
+                    <button onClick={handleLogout} className="logout-button">Logout</button>
+                </div>
+            </nav>
             <div className="home-content">
                 <h2>Add New Annonce</h2>
                 <form onSubmit={handleSubmit} className="annonce-form">
