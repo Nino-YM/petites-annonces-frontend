@@ -14,6 +14,10 @@ export const login = (credentials) => {
         });
 };
 
+export const register = (user) => {
+    return axios.post(`${API_URL}/register`, user);
+};
+
 export const logout = () => {
     return axios.post(`${API_URL}/logout`, {}, {
         headers: {
