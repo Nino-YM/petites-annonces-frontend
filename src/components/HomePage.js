@@ -7,6 +7,9 @@ const HomePage = ({ user, handleLogout }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [prix, setPrix] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const annoncesPerPage = 5;
 
     useEffect(() => {
         const fetchAnnonces = async () => {
@@ -36,6 +39,18 @@ const HomePage = ({ user, handleLogout }) => {
         }
     };
 
+    // Filter annonces based on search term
+    const filteredAnnonces = annonces.filter(annonce =>
+        annonce.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        annonce.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastAnnonce = currentPage * annoncesPerPage;
+    const indexOfFirstAnnonce = indexOfLastAnnonce - annoncesPerPage;
+    const currentAnnonces = filteredAnnonces.slice(indexOfFirstAnnonce, indexOfLastAnnonce);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="home-page">
             <nav className="navbar">
@@ -63,8 +78,15 @@ const HomePage = ({ user, handleLogout }) => {
                     <button type="submit">Add Annonce</button>
                 </form>
                 <h2>All Annonces</h2>
+                <input
+                    type="text"
+                    placeholder="Search annonces..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-bar"
+                />
                 <div className="annonce-list">
-                    {annonces.map((annonce) => (
+                    {currentAnnonces.map((annonce) => (
                         <div key={annonce.id} className="annonce-item">
                             <h3>{annonce.titre}</h3>
                             <p>{annonce.description}</p>
@@ -73,8 +95,36 @@ const HomePage = ({ user, handleLogout }) => {
                         </div>
                     ))}
                 </div>
+                <Pagination
+                    annoncesPerPage={annoncesPerPage}
+                    totalAnnonces={filteredAnnonces.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                />
             </div>
         </div>
+    );
+};
+
+const Pagination = ({ annoncesPerPage, totalAnnonces, paginate, currentPage }) => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalAnnonces / annoncesPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+    return (
+        <nav className="pagination">
+            <ul>
+                {pageNumbers.map(number => (
+                    <li key={number} className={number === currentPage ? 'active' : ''}>
+                        <a onClick={() => paginate(number)} href="#!">
+                            {number}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
     );
 };
 

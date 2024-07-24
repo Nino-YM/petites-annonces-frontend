@@ -7,8 +7,11 @@ const AdminPage = ({ user, handleLogout }) => {
     const [description, setDescription] = useState('');
     const [prix, setPrix] = useState('');
     const [annonces, setAnnonces] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [editMode, setEditMode] = useState(false);
     const [currentAnnonceId, setCurrentAnnonceId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const annoncesPerPage = 5;
 
     useEffect(() => {
         const fetchAnnonces = async () => {
@@ -35,7 +38,7 @@ const AdminPage = ({ user, handleLogout }) => {
                 setDescription('');
                 setPrix('');
                 const response = await getAnnonces();
-                setAnnonces(response.data.annonces); // Update the list of annonces
+                setAnnonces(response.data.annonces);
             } catch (error) {
                 console.error('Failed to create annonce', error);
             }
@@ -47,7 +50,7 @@ const AdminPage = ({ user, handleLogout }) => {
             await deleteAnnonce(id);
             alert('Annonce deleted successfully');
             const response = await getAnnonces();
-            setAnnonces(response.data.annonces); // Update the list of annonces
+            setAnnonces(response.data.annonces);
         } catch (error) {
             console.error('Failed to delete annonce', error);
         }
@@ -71,11 +74,23 @@ const AdminPage = ({ user, handleLogout }) => {
             setEditMode(false);
             setCurrentAnnonceId(null);
             const response = await getAnnonces();
-            setAnnonces(response.data.annonces); // Update the list of annonces
+            setAnnonces(response.data.annonces);
         } catch (error) {
             console.error('Failed to update annonce', error);
         }
     };
+
+    // Filter annonces based on search term
+    const filteredAnnonces = annonces.filter(annonce =>
+        annonce.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        annonce.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastAnnonce = currentPage * annoncesPerPage;
+    const indexOfFirstAnnonce = indexOfLastAnnonce - annoncesPerPage;
+    const currentAnnonces = filteredAnnonces.slice(indexOfFirstAnnonce, indexOfLastAnnonce);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div className="admin-page">
@@ -104,6 +119,13 @@ const AdminPage = ({ user, handleLogout }) => {
                     <button type="submit">{editMode ? 'Update Annonce' : 'Add Annonce'}</button>
                 </form>
                 <h2>All Annonces</h2>
+                <input
+                    type="text"
+                    placeholder="Search annonces..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-bar"
+                />
                 <table className="annonces-table">
                     <thead>
                         <tr>
@@ -115,7 +137,7 @@ const AdminPage = ({ user, handleLogout }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {annonces.map((annonce) => (
+                        {currentAnnonces.map((annonce) => (
                             <tr key={annonce.id}>
                                 <td>{annonce.titre}</td>
                                 <td>{annonce.description}</td>
@@ -129,8 +151,36 @@ const AdminPage = ({ user, handleLogout }) => {
                         ))}
                     </tbody>
                 </table>
+                <Pagination
+                    annoncesPerPage={annoncesPerPage}
+                    totalAnnonces={filteredAnnonces.length}
+                    paginate={paginate}
+                    currentPage={currentPage}
+                />
             </div>
         </div>
+    );
+};
+
+const Pagination = ({ annoncesPerPage, totalAnnonces, paginate, currentPage }) => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= Math.ceil(totalAnnonces / annoncesPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+    return (
+        <nav className="pagination">
+            <ul>
+                {pageNumbers.map(number => (
+                    <li key={number} className={number === currentPage ? 'active' : ''}>
+                        <a onClick={() => paginate(number)} href="#!">
+                            {number}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
     );
 };
 
