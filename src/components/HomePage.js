@@ -1,4 +1,3 @@
-// HomePage.js
 import React, { useEffect, useState } from 'react';
 import { getAnnonces, addAnnonce } from '../services/api';
 import './HomePage.css';
@@ -40,7 +39,7 @@ const HomePage = ({ user, handleLogout }) => {
     return (
         <div className="home-page">
             <nav className="navbar">
-                <div className="navbar-brand"> Petites Annonces</div>
+                <div className="navbar-brand">Petites Annonces</div>
                 <div className="navbar-user">
                     <span>Welcome, {user.name}</span>
                     <button onClick={handleLogout} className="logout-button">Logout</button>
@@ -64,16 +63,16 @@ const HomePage = ({ user, handleLogout }) => {
                     <button type="submit">Add Annonce</button>
                 </form>
                 <h2>All Annonces</h2>
-                <ul>
+                <div className="annonce-list">
                     {annonces.map((annonce) => (
-                        <li key={annonce.id}>
-                            <h2>{annonce.titre}</h2>
+                        <div key={annonce.id} className="annonce-item">
+                            <h3>{annonce.titre}</h3>
                             <p>{annonce.description}</p>
-                            <p>Price: {annonce.prix}</p>
+                            <p>Price: ${annonce.prix}</p>
                             <p>Posted by: {annonce.user.name}</p>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
         </div>
     );

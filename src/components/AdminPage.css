@@ -1,8 +1,7 @@
-/* HomePage.css */
-.home-page,
+/* AdminPage.css */
 .admin-page {
-    text-align: center;
     padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
 .navbar {
@@ -43,17 +42,15 @@
     background-color: #218838;
 }
 
-.admin-content,
-.home-content {
+.admin-content {
     margin-top: 20px;
 }
 
-.admin-form,
-.annonce-form {
+.admin-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 400px;
+    max-width: 600px;
     margin: 0 auto;
     background: white;
     padding: 20px;
@@ -98,4 +95,54 @@ button {
 
 button:hover {
     background-color: #218838;
+}
+
+.annonces-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.annonces-table th,
+.annonces-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.annonces-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.annonces-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.annonces-table tr:hover {
+    background-color: #ddd;
+}
+
+.edit-button,
+.delete-button {
+    background-color: #007bff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-button {
+    background-color: #dc3545;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
 }
